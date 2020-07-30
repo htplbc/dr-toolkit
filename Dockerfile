@@ -3,7 +3,11 @@ FROM mongo:4.2-bionic
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y tzdata locales
+    apt-get install -y tzdata locales wget
+
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update
 
 
 # Set the timezone
@@ -35,22 +39,16 @@ RUN apt-get install -y \
     less \
     man \
     ssh \
-    postgresql \
+    postgresql-11 \
     python3 \
     python3-pip \
     vim \
     vim-nox \
     zip
 
-RUN adduser --home /home/aws --disabled-login --gecos '' aws
+WORKDIR /
 
-USER aws
-WORKDIR /home/aws
-
-RUN \
-    pip3 install awscli && \
-    echo 'complete -C aws_completer aws' >> .bashrc
-
+RUN pip3 install awscli
 
 # Define mountable directories.
 VOLUME ["/data/db"]

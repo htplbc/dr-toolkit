@@ -1,4 +1,4 @@
-VERSION = 1.0.0-r1
+VERSION = 1.0.0-r3
 IMAGE = htplbc/dr-toolkit:$(VERSION)
 
 all:
